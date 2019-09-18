@@ -65,17 +65,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = if (age in 10..20)
-    "$age лет"
-else if (age in 110..120)
-    "$age лет"
-else if ((age % 10) in 2..4)
-    "$age года"
-else if ((age % 10) in 5..9)
-    "$age лет"
-else if ((age % 10) == 1)
-    "$age год"
-else "$age лет"
+fun ageDescription(age: Int): String = when {
+    age in 10..20 -> "$age лет"
+    age in 110..120 -> "$age лет"
+    (age % 10) in 2..4 -> "$age года"
+    (age % 10) in 5..9 -> "$age лет"
+    (age % 10) == 1 -> "$age год"
+    else -> "$age лет"
+}
 
 
 /**
@@ -117,14 +114,14 @@ fun whichRookThreatens(
     rookY1: Int,
     rookX2: Int,
     rookY2: Int
-): Int {
-    return when {
-        ((kingX == rookX2) or (kingY == rookY2)) and ((kingX == rookX1) or (kingY == rookY1)) -> 3
-        (kingX == rookX1) or (kingY == rookY1) -> 1
-        (kingX == rookX2) or (kingY == rookY2) -> 2
+): Int =
+    when {
+        ((kingX == rookX2) || (kingY == rookY2)) && ((kingX == rookX1) || (kingY == rookY1)) -> 3
+        (kingX == rookX1) || (kingY == rookY1) -> 1
+        (kingX == rookX2) || (kingY == rookY2) -> 2
         else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -140,14 +137,14 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int {
-    return when {
-        ((kingX == rookX) or (kingY == rookY)) and (abs(bishopX - kingX) == abs(bishopY - kingY)) -> 3
-        (kingX == rookX) or (kingY == rookY) -> 1
+): Int =
+    when {
+        ((kingX == rookX) || (kingY == rookY)) && (abs(bishopX - kingX) == abs(bishopY - kingY)) -> 3
+        (kingX == rookX) || (kingY == rookY) -> 1
         (abs(bishopX - kingX) == abs(bishopY - kingY)) -> 2
         else -> 0
     }
-}
+
 
 /**
  * Простая
@@ -158,25 +155,25 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val x = max(a, b)
-    val mx = max(x, c)
+    val mx = maxOf(a, b, c)
     return when {
-        (mx == a) and (a > b + c) -> -1
-        (mx == a) and (sqr(a) == sqr(b) + sqr(c)) -> 1
-        (mx == a) and (sqr(a) > sqr(b) + sqr(c)) -> 2
-        (mx == a) and (sqr(a) < sqr(b) + sqr(c)) -> 0
-        (mx == b) and (b > a + c) -> -1
-        (mx == b) and (sqr(b) == sqr(a) + sqr(c)) -> 1
-        (mx == b) and (sqr(b) > sqr(a) + sqr(c)) -> 2
-        (mx == b) and (sqr(b) < sqr(a) + sqr(c)) -> 0
-        (mx == c) and (c > b + a) -> -1
-        (mx == c) and (sqr(c) == sqr(a) + sqr(b)) -> 1
-        (mx == c) and (sqr(c) > sqr(a) + sqr(b)) -> 2
-        (mx == c) and (sqr(c) < sqr(a) + sqr(b)) -> 1
+        (mx == a) && (a > b + c) -> -1
+        (mx == a) && (sqr(a) == sqr(b) + sqr(c)) -> 1
+        (mx == a) && (sqr(a) > sqr(b) + sqr(c)) -> 2
+        (mx == a) && (sqr(a) < sqr(b) + sqr(c)) -> 0
+        (mx == b) && (b > a + c) -> -1
+        (mx == b) && (sqr(b) == sqr(a) + sqr(c)) -> 1
+        (mx == b) && (sqr(b) > sqr(a) + sqr(c)) -> 2
+        (mx == b) && (sqr(b) < sqr(a) + sqr(c)) -> 0
+        (mx == c) && (c > b + a) -> -1
+        (mx == c) && (sqr(c) == sqr(a) + sqr(b)) -> 1
+        (mx == c) && (sqr(c) > sqr(a) + sqr(b)) -> 2
+        (mx == c) && (sqr(c) < sqr(a) + sqr(b)) -> 0
         else -> -1
     }
-}
 
+
+}
 
 /**
  * Средняя
@@ -186,11 +183,13 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    if ((a <= c) and (b <= d) and (b >= c)) return b - c
-    if ((a >= c) and (b >= d) and (d >= a)) return d - a
-    if ((a <= c) and (d <= b)) return d - c
-    if ((c <= a) and (b <= d)) return b - a
-    if ((c == a) and (b == d)) return c - d
-    else return -1
-}
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    when {
+        (a <= c) and (b <= d) and (b >= c) -> b - c
+        (a >= c) and (b >= d) and (d >= a) -> d - a
+        (a <= c) and (d <= b) -> d - c
+        (c <= a) and (b <= d) -> b - a
+        (c == a) and (b == d) -> c - d
+        else -> -1
+    }
+
