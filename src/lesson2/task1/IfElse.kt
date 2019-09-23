@@ -155,20 +155,13 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val mx = maxOf(a, b, c)
+    val max = maxOf(a, b, c)
     return when {
-        (mx == a) && (a > b + c) -> -1
-        (mx == a) && (sqr(a) == sqr(b) + sqr(c)) -> 1
-        (mx == a) && (sqr(a) > sqr(b) + sqr(c)) -> 2
-        (mx == a) && (sqr(a) < sqr(b) + sqr(c)) -> 0
-        (mx == b) && (b > a + c) -> -1
-        (mx == b) && (sqr(b) == sqr(a) + sqr(c)) -> 1
-        (mx == b) && (sqr(b) > sqr(a) + sqr(c)) -> 2
-        (mx == b) && (sqr(b) < sqr(a) + sqr(c)) -> 0
-        (mx == c) && (c > b + a) -> -1
-        (mx == c) && (sqr(c) == sqr(a) + sqr(b)) -> 1
-        (mx == c) && (sqr(c) > sqr(a) + sqr(b)) -> 2
-        (mx == c) && (sqr(c) < sqr(a) + sqr(b)) -> 0
+        (2 * max > a + b + c) -> -1
+        (2 * sqr(max) == sqr(a) + sqr(b) + sqr(c)) -> 1
+        (2 * sqr(max) > sqr(a) + sqr(b) + sqr(c)) -> 2
+        (2 * sqr(max) < sqr(a) + sqr(b) + sqr(c)) -> 0
+
         else -> -1
     }
 
