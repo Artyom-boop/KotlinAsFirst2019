@@ -241,7 +241,7 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int {
+fun revert(n: Int): Long {
     var number = n
     var count = 0
     var digit = 0
@@ -256,7 +256,7 @@ fun revert(n: Int): Int {
         number /= 10
         revert += digit * 10.0.pow(count)
     }
-    return revert.toInt() / 10
+    return revert.toLong() / 10
 }
 
 /**
