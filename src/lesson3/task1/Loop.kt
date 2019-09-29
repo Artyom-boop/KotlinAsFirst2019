@@ -89,7 +89,7 @@ fun fib(n: Int): Int {
     var number = 0
     var fib1 = 1
     var fib2 = 1
-    var fib = 0
+    var fib: Int
     while (number < n - 2) {
         fib = fib1 + fib2
         fib2 = fib1
@@ -244,17 +244,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun revert(n: Int): Long {
     var number = n
     var count = 0
-    var digit = 0
+    var digit: Int
     var revert = 0.0
     while (abs(number) > 0) {
         number /= 10
         count++
     }
     number = n
-    for (count in count downTo 1) {
+    for (i in count downTo 1) {
         digit = number % 10
         number /= 10
-        revert += digit * 10.0.pow(count)
+        revert += digit * 10.0.pow(i)
     }
     return revert.toLong() / 10
 }
@@ -268,7 +268,16 @@ fun revert(n: Int): Long {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var count = digitNumber(n)
+    val digit = count / 2
+    val number1 = n % 10.0.pow(digit).toInt()
+    val number2: Int
+    if (count % 2 == 0) number2 = n / 10.0.pow(digit).toInt()
+    else number2 = n / 10.0.pow(digit + 1).toInt()
+    return number1 == revert(number2).toInt()
+
+}
 
 /**
  * Средняя

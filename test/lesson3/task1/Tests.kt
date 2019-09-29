@@ -204,6 +204,7 @@ class Tests {
         assertEquals(111, revert(111))
         assertEquals(17571, revert(17571))
         assertEquals(123456789, revert(987654321))
+        assertEquals(749621141, revert(141126947))
     }
 
     @Test
