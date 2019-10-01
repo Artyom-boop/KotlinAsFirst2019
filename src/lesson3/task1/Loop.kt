@@ -3,7 +3,6 @@
 package lesson3.task1
 
 import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 /**
@@ -14,7 +13,7 @@ import kotlin.math.sqrt
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -136,16 +135,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    if (n % 2 == 0) {
-        for (i in n / 2 downTo 2)
-            if (n % i == 0) return i
-    } else {
-        for (i in n / 3 downTo 3)
-            if (n % i == 0) return i
-    }
-    return 1
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -241,23 +231,16 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Long {
+fun revert(n: Int): Int {
+    var revert = 0
     var number = n
-    var count = 0
-    var digit: Int
-    var revert = 0.0
-    while (abs(number) > 0) {
+    while (number > 0) {
+        revert = revert * 10 + number % 10
         number /= 10
-        count++
     }
-    number = n
-    for (i in count downTo 1) {
-        digit = number % 10
-        number /= 10
-        revert += digit * 10.0.pow(i)
-    }
-    return revert.toLong() / 10
+    return revert
 }
+
 
 /**
  * Средняя
@@ -268,16 +251,7 @@ fun revert(n: Int): Long {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var count = digitNumber(n)
-    val digit = count / 2
-    val number1 = n % 10.0.pow(digit).toInt()
-    val number2: Int
-    if (count % 2 == 0) number2 = n / 10.0.pow(digit).toInt()
-    else number2 = n / 10.0.pow(digit + 1).toInt()
-    return number1 == revert(number2).toInt()
-
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -289,16 +263,11 @@ fun isPalindrome(n: Int): Boolean {
  */
 fun hasDifferentDigits(n: Int): Boolean {
     var number = n
-    var count = 0
+    val count = digitNumber(n)
     var digit = 1
     var x1: Int
     var x2: Int
     if (n == 0) return false
-    while (abs(number) > 0) {
-        number /= 10
-        count++
-    }
-    number = n
     while (number != 0) {
         x1 = number % 10
         number /= 10
@@ -345,17 +314,17 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var sqr = 1
+    var fib = 1
     var count = 0
     var result = 1
     for (i in 1..n) {
-        sqr = fib(i)
-        count += digitNumber(sqr)
+        fib = fib(i)
+        count += digitNumber(fib)
         if (count >= n) break
     }
     while (count >= n) {
-        result = sqr % 10
-        sqr /= 10
+        result = fib % 10
+        fib /= 10
         count -= 1
     }
     return result
