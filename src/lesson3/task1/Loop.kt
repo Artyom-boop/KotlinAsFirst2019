@@ -166,9 +166,9 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     for (i in m..n) {
         root1 = sqrt(i.toDouble()).toInt()
         root2 = sqrt(i.toDouble())
-        if (root1.toDouble() == root2) break
+        if (root1.toDouble() == root2) return true
     }
-    return root1.toDouble() == root2
+    return false
 }
 
 /**
