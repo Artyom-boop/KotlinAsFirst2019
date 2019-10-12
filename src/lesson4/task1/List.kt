@@ -458,7 +458,7 @@ fun russian(n: Int): String {
         count -= 2
     }
     if (count == 5) {
-        string += decade(n / 10000)
+        string += decade(number / 10000)
         number %= 10000
         count -= 1
     }
