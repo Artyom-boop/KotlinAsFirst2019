@@ -149,7 +149,7 @@ class Tests {
         )
         assertEquals(
             listOf("Marat"),
-            whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Marat", "Kirill"))
+            whoAreInBoth(listOf("Marat", "Mikhail"), listOf("Marat", "Kirill", "Marat"))
         )
         assertEquals(
             emptyList<String>(),
@@ -309,6 +309,27 @@ class Tests {
             Pair(-1, -1),
             findSumOfTwo(listOf(1, 2, 3), 6)
         )
+        assertEquals(
+            Pair(1, 13),
+            findSumOfTwo(
+                listOf(
+                    1,
+                    0,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    0
+                ), 0
+            )
+        )
     }
 
     @Test
@@ -326,6 +347,13 @@ class Tests {
             bagPacking(
                 mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000)),
                 450
+            )
+        )
+        assertEquals(
+            setOf("Кубок", "Кирпич"),
+            bagPacking(
+                mapOf("Кубок" to (900 to 2000), "Слиток" to (1000 to 5000), "Кирпич" to (1000 to 50000)),
+                1900
             )
         )
     }

@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -96,6 +98,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val list4 = mutableListOf<String>()
     val list3 = mutableListOf<String>()
     val list2 = mutableListOf<String>()
+    val list1 = mutableListOf<String>()
+    val list0 = mutableListOf<String>()
     val map = mutableMapOf<Int, List<String>>()
     for ((name, grade) in grades) {
         when (grade) {
@@ -110,6 +114,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
             }
             2 -> {
                 list2 += name; map[2] = list2
+            }
+            1 -> {
+                list1 += name; map[1] = list1
+            }
+            0 -> {
+                list0 += name; map[0] = list0
             }
         }
     }
@@ -158,12 +168,12 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val name = mutableListOf<String>()
+    val name = mutableSetOf<String>()
     for (nameA in a)
         for (nameB in b) if (nameA == nameB) {
             name += nameB
         }
-    return name
+    return name.toList()
 }
 
 /**
@@ -207,8 +217,9 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+
     val result = mutableMapOf<String, Double>()
-    var sum = 0.0
+    var sum: Double
     var count: Int
     for ((name1, price1) in stockPrices) {
         sum = price1
@@ -271,11 +282,15 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
+    var count = 1
     for (i in 0..list.size - 2) {
-        var count = 1
-        for (j in i + 1 until list.size)
-            if (list[i] == list[j]) count++
-        if (count - 1 != 0) map += (list[i] to count)
+        if (list[i] !in map) {
+            for (j in i + 1 until list.size)
+                if (list[i] == list[j]) {
+                    count++
+                    if (count != 0) map += (list[i] to count)
+                }
+        }
     }
     return map
 }
@@ -348,8 +363,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var set = setOf(list)
-    for (i in list.indices - 1)
+    for (i in list.indices)
         for (j in i + 1 until list.size)
             if (list[i] + list[j] == number) return (i to j)
     return (-1 to -1)
@@ -376,4 +390,36 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val table: Array<Array<Int>> = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    val p = Array(treasures.size + 1) { 0 }
+    val m = Array(treasures.size + 1) { 0 }
+    val name = Array(treasures.size + 1) { "" }
+    val set = mutableSetOf<String>()
+    val n = mutableListOf<Int>()
+    var i = 0
+    for ((key, value) in treasures) {
+        i++
+        p[i] = value.second
+        m[i] = value.first
+        name[i] = key
+    }
+    for (k in 1..treasures.size)
+        for (s in 0..capacity)
+            if (s >= m[k]) {
+                table[k][s] = max(table[k - 1][s], table[k - 1][s - m[k]] + p[k])
+            } else table[k][s] = table[k - 1][s]
+    var s = capacity
+    for (k in treasures.size downTo 1) {
+        if (table[k - 1][s] != table[k][s]) {
+            n += k
+            s -= m[k]
+        }
+    }
+
+    for (i in 1 until name.size)
+        if (i in n)
+            set += name[i]
+    return set
+
+}
