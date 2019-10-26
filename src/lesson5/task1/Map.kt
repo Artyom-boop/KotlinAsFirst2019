@@ -94,36 +94,18 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val list5 = mutableListOf<String>()
-    val list4 = mutableListOf<String>()
-    val list3 = mutableListOf<String>()
-    val list2 = mutableListOf<String>()
-    val list1 = mutableListOf<String>()
-    val list0 = mutableListOf<String>()
-    val map = mutableMapOf<Int, List<String>>()
-    for ((name, grade) in grades) {
-        when (grade) {
-            5 -> {
-                list5 += name; map[5] = list5
+    var res = mapOf<Int, List<String>>()
+    for ((key, value) in grades) {
+        if (value !in res) {
+            val set = mutableSetOf<String>(key)
+            for ((key1, value1) in grades) {
+                if (value == value1)
+                    set += key1
             }
-            4 -> {
-                list4 += name; map[4] = list4
-            }
-            3 -> {
-                list3 += name; map[3] = list3
-            }
-            2 -> {
-                list2 += name; map[2] = list2
-            }
-            1 -> {
-                list1 += name; map[1] = list1
-            }
-            0 -> {
-                list0 += name; map[0] = list0
-            }
+            res = res + (value to set.toList())
         }
     }
-    return map
+    return res
 }
 
 /**
@@ -263,8 +245,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val charsMod = mutableListOf<Char>()
+    for (i in chars.indices)
+        charsMod += chars[i].toLowerCase()
     for (element in word)
-        if (element !in chars) return false
+        if (element.toLowerCase() !in charsMod) return false
     return true
 }
 
@@ -282,8 +267,8 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
-    var count = 1
     for (i in 0..list.size - 2) {
+        var count = 1
         if (list[i] !in map) {
             for (j in i + 1 until list.size)
                 if (list[i] == list[j]) {
@@ -305,9 +290,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    var set1 = setOf<Char>()
-    var set2 = setOf<Char>()
     for (i in 0..words.size - 2) {
+        var set1 = setOf<Char>()
+        var set2 = setOf<Char>()
         for (element in words[i])
             set1 = set1 + element
         for (j in i + 1 until words.size) {
