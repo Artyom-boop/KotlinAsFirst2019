@@ -292,10 +292,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
 fun hasAnagrams(words: List<String>): Boolean {
     for (i in 0..words.size - 2) {
         var set1 = setOf<Char>()
-        var set2 = setOf<Char>()
         for (element in words[i])
             set1 = set1 + element
         for (j in i + 1 until words.size) {
+            var set2 = setOf<Char>()
             for (element in words[j])
                 set2 = set2 + element
             if (set1 == set2) return true
