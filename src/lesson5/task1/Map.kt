@@ -199,23 +199,21 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-
-    val result = mutableMapOf<String, Double>()
-    var sum: Double
-    var count: Int
-    for ((name1, price1) in stockPrices) {
-        sum = price1
-        count = 1
-        if (name1 !in result) {
-            for ((name2, price2) in stockPrices)
-                if ((name1 == name2) and (price1 != price2)) {
-                    sum += price2
-                    count++
-                }
-            result += (name1 to (sum / count))
-        }
+    val set = mutableSetOf<String>()
+    val res = mutableMapOf<String, Double>()
+    for ((first) in stockPrices)
+        set += first
+    for (element in set) {
+        var sum = 0.0
+        var count = 0
+        for ((name, price) in stockPrices)
+            if (name == element) {
+                sum += price
+                count += 1
+            }
+        res += (element to sum / count)
     }
-    return result
+    return res
 }
 
 /**
