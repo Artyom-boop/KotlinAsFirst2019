@@ -236,9 +236,9 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     if (chars.isEmpty() and word.isNotEmpty()) return false
     val set = mutableSetOf<Char>()
     for (element in chars)
-        set += element
+        set += element.toLowerCase()
     for (element in word)
-        if (element !in set) return false
+        if (element.toLowerCase() !in set) return false
     return true
 }
 
