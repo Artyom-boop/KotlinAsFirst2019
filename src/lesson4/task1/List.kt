@@ -132,11 +132,10 @@ fun abs(v: List<Double>): Double {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0 else list.fold(0.0) { previousResult, element ->
+fun mean(list: List<Double>): Double =
+    if (list.isEmpty()) 0.0 else list.fold(0.0) { previousResult, element ->
         previousResult + element
     } / list.size
-}
 
 /**
  * Средняя
@@ -147,11 +146,9 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val average = (list.sum() / list.size)
-    for (i in 0 until list.size) {
-        val element = list[i]
-        list[i] = element - average
-    }
+    val average = mean(list)
+    for (i in 0 until list.size)
+        list[i] -= average
     return list
 }
 
@@ -196,12 +193,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     if (list.size == 0) return list
-    var sum1 = list[0]
-    var sum: Int
     for (i in 1 until list.size) {
-        sum = list[i]
-        list[i] = list[i] + sum1
-        sum1 += sum
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -273,36 +266,12 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
     var result = ""
-    for (element in list) when (element) {
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9 -> result += element.toString()
-        10 -> result += 'a'
-        11 -> result += 'b'
-        12 -> result += 'c'
-        13 -> result += 'd'
-        14 -> result += 'e'
-        15 -> result += 'f'
-        16 -> result += 'g'
-        17 -> result += "h"
-        18 -> result += 'i'
-        19 -> result += 'j'
-        20 -> result += 'k'
-        21 -> result += 'l'
-        22 -> result += 'm'
-        23 -> result += 'n'
-        24 -> result += 'o'
-        25 -> result += 'p'
-        26 -> result += 'q'
-        27 -> result += 'r'
-        28 -> result += 's'
-        29 -> result += "t"
-        30 -> result += 'u'
-        31 -> result += 'v'
-        32 -> result += 'w'
-        33 -> result += 'x'
-        34 -> result += 'y'
-        35 -> result += 'z'
+    for (element in list) {
+        when (element) {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9 -> result += element.toString()
+        }
+        if (element > 9) result += 'a' + element - 10
     }
-
     return result
 }
 
@@ -397,51 +366,50 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun hundred(x: Int): String {
-    var string = ""
+fun hundred(x: Int): String =
     when (x) {
-        9 -> string += " девятьсот"
-        8 -> string += " восемьсот"
-        7 -> string += " семьсот"
-        6 -> string += " шестьсот"
-        5 -> string += " пятьсот"
-        4 -> string += " четыреста"
-        3 -> string += " триста"
-        2 -> string += " двести"
-        1 -> string += " сто"
+        9 -> " девятьсот"
+        8 -> " восемьсот"
+        7 -> " семьсот"
+        6 -> " шестьсот"
+        5 -> " пятьсот"
+        4 -> " четыреста"
+        3 -> " триста"
+        2 -> " двести"
+        1 -> " сто"
+        else -> ""
     }
-    return string
-}
-fun decadeException(x: Int): String {
-    var string = ""
+
+fun decadeException(x: Int): String =
     when (x) {
-        19 -> string += " девятнадцать"
-        18 -> string += " восемнадцать"
-        17 -> string += " семнадцать"
-        16 -> string += " шестнадцать"
-        15 -> string += " пятнадцать"
-        14 -> string += " четырнадцать"
-        13 -> string += " тринадцать"
-        12 -> string += " двенадцать"
-        11 -> string += " одиннадцать"
-        10 -> string += " десять"
+        19 -> " девятнадцать"
+        18 -> " восемнадцать"
+        17 -> " семнадцать"
+        16 -> " шестнадцать"
+        15 -> " пятнадцать"
+        14 -> " четырнадцать"
+        13 -> " тринадцать"
+        12 -> " двенадцать"
+        11 -> " одиннадцать"
+        10 -> " десять"
+        else -> ""
     }
-    return string
-}
-fun decade(x: Int): String {
-    var string = ""
+
+
+fun decade(x: Int): String =
     when (x) {
-        9 -> string += " девяносто"
-        8 -> string += " восемьдесят"
-        7 -> string += " семьдесят"
-        6 -> string += " шестьдесят"
-        5 -> string += " пятьдесят"
-        4 -> string += " сорок"
-        3 -> string += " тридцать"
-        2 -> string += " двадцать"
+        9 -> " девяносто"
+        8 -> " восемьдесят"
+        7 -> " семьдесят"
+        6 -> " шестьдесят"
+        5 -> " пятьдесят"
+        4 -> " сорок"
+        3 -> " тридцать"
+        2 -> " двадцать"
+        else -> ""
     }
-    return string
-}
+
+
 fun russian(n: Int): String {
     var count = digitNumber(n)
     var string = ""
