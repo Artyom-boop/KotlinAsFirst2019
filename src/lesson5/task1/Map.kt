@@ -135,9 +135,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    for ((key) in b)
+    for ((key, value) in b)
         if (key in a)
-            if (a[key] == b[key]) a.remove(key)
+            if (a[key] == value) a.remove(key)
 }
 
 /**
@@ -167,16 +167,14 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
-    val delite = mutableListOf<String>()
     val mapC = mutableMapOf<String, String>()
     for ((keyA, valueA) in mapA) {
         if (keyA in mapB) {
             mapC += if (mapB[keyA] == valueA)
                 (keyA to valueA) else (keyA to (valueA + ", " + mapB[keyA]))
-            delite += keyA
         }
     }
-    return mapC + (mapA - delite) + (mapB - delite)
+    return mapA + mapB + mapC
 }
 
 /**
@@ -233,13 +231,15 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    if (chars.isEmpty() and word.isNotEmpty()) return false
-    val set = mutableSetOf<Char>()
+    if (chars.isEmpty() && word.isNotEmpty()) return false
+    val set1 = mutableSetOf<Char>()
+    val set2 = mutableSetOf<Char>()
     for (element in chars)
-        set += element.toLowerCase()
+        set1 += element.toLowerCase()
     for (element in word)
-        if (element.toLowerCase() !in set) return false
-    return true
+        set2 += element.toLowerCase()
+    if (set1 == set2) return true
+    return false
 }
 
 /**
