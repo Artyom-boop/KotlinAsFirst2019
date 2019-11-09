@@ -242,7 +242,7 @@ class Tests {
     fun extractRepeats() {
         assertEquals(
             mapOf("a" to 2),
-            extractRepeats(listOf("a", "a", "b"))
+            extractRepeats(listOf("a", "b", "a"))
         )
         assertEquals(
             emptyMap<String, Int>(),
