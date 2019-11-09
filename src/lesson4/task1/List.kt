@@ -306,43 +306,18 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (element in str) {
-        when (element) {
-            '0' -> list += 0
-            '1' -> list += 1
-            '2' -> list += 2
-            '3' -> list += 3
-            '4' -> list += 4
-            '5' -> list += 5
-            '6' -> list += 6
-            '7' -> list += 7
-            '8' -> list += 8
-            '9' -> list += 9
-            'a' -> list += 10
-            'b' -> list += 11
-            'c' -> list += 12
-            'd' -> list += 13
-            'e' -> list += 14
-            'f' -> list += 15
-            'g' -> list += 16
-            'h' -> list += 17
-            'i' -> list += 18
-            'j' -> list += 19
-            'k' -> list += 20
-            'l' -> list += 21
-            'm' -> list += 22
-            'n' -> list += 23
-            'o' -> list += 24
-            'p' -> list += 25
-            'q' -> list += 26
-            'r' -> list += 27
-            's' -> list += 28
-            't' -> list += 29
-            'u' -> list += 30
-            'v' -> list += 31
-            'w' -> list += 32
-            'x' -> list += 33
-            'y' -> list += 34
-            'z' -> list += 35
+        list += when (element) {
+            '0' -> 0
+            '1' -> 1
+            '2' -> 2
+            '3' -> 3
+            '4' -> 4
+            '5' -> 5
+            '6' -> 6
+            '7' -> 7
+            '8' -> 8
+            '9' -> 9
+            else -> element.toInt() - 87
         }
     }
     return decimal(list, base)

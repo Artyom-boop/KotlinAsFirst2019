@@ -246,7 +246,7 @@ class Tests {
         )
         assertEquals(
             mapOf("a" to 2),
-            extractRepeats(listOf("a", "b", "a"))
+            extractRepeats(listOf("a", "a", "b"))
         )
         assertEquals(
             emptyMap<String, Int>(),

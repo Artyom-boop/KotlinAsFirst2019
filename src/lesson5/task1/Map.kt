@@ -94,16 +94,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val listGrade = mutableSetOf<Int>()
-    listGrade.addAll(grades.values)
     val res = mutableMapOf<Int, List<String>>()
-    for (element in listGrade) {
-        val list = mutableListOf<String>()
-        for ((name, grade) in grades)
-            if (element == grade) {
-                list += name
-            }
-        res += (element to list)
+    for ((name, grade) in grades) {
+        if (grade in res) res[grade] = res[grade]!!.plus(listOf(name))
+        else res[grade] = listOf(name)
     }
     return res
 }
@@ -190,17 +184,18 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
     val set = mutableSetOf<String>()
     val res = mutableMapOf<String, Double>()
-    set.addAll(stockPrices.toMap().keys)
-    for (element in set) {
-        var sum = 0.0
-        var count = 0
-        for ((name, price) in stockPrices)
-            if (name == element) {
-                sum += price
-                count += 1
-            }
-        res += (element to sum / count)
+    val mapCount = mutableMapOf<String, Int>()
+    for ((name, price) in stockPrices) {
+        if (name in res) {
+            res[name] = res[name]!!.plus(price)
+            mapCount[name] = mapCount[name]!!.plus(1)
+        } else {
+            res[name] = price
+            mapCount[name] = 1
+        }
     }
+    for ((name, count) in mapCount)
+        res[name] = res[name]!!.div(count)
     return res
 }
 
@@ -231,11 +226,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    if (chars.isEmpty() and word.isNotEmpty()) return false
+    if (chars.isEmpty() && word.isNotEmpty()) return false
     val set = mutableSetOf<Char>()
     for (element in chars)
         set += element.toLowerCase()
-    for (element in word)
+    for (element in word.toSet())
         if (element.toLowerCase() !in set) return false
     return true
 }
@@ -254,16 +249,12 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
-    for (i in 0..list.size - 2) {
-        var count = 1
-        if (list[i] !in map) {
-            for (j in i + 1 until list.size)
-                if (list[i] == list[j]) {
-                    count++
-                    if (count != 0) map += (list[i] to count)
-                }
-        }
+    for (element in list) {
+        if (element in map) {
+            map[element] = map[element]!!.plus(1)
+        } else map[element] = 1
     }
+    for ((key, value) in map) if (value <= 1) map.remove(key)
     return map
 }
 
@@ -277,14 +268,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val list = words.map { it.toSet() }.toMutableList()
-    for (element in words) {
-        val word = element.toSet()
-        list.remove(element.toSet())
-        if (word in list) return true
-    }
+    val list = words.map { it.toSet() }.toMutableSet()
+    if (words.size != list.size) return true
     return false
-
 }
 
 /**
