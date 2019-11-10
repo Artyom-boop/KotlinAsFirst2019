@@ -72,36 +72,40 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val month = listOf(
-        "января",
-        "февраля",
-        "марта",
-        "апреля",
-        "мая",
-        "июня",
-        "июля",
-        "августа",
-        "сентября",
-        "октября",
-        "ноября",
-        "декабря"
-    )
-    var res = ""
-    val parts = str.split(" ")
-    if (parts.size != 3) return ""
-    val numderMonth = month.indexOf(parts[1]) + 1
-    if (daysInMonth(numderMonth, parts[2].toInt()) >= parts[0].toInt())
-        res += if (parts[0].toInt() <= 9 && parts[0].first() != '0') "0" + parts[0] + "."
-        else parts[0] + "."
-    else return ""
-    if (parts[1] in month) {
-        res = if (numderMonth > 9)
-            res + numderMonth.toString() + "." + parts[2]
-        else res + "0" + numderMonth.toString() + "." + parts[2]
-    } else {
+    try {
+        val month = listOf(
+            "января",
+            "февраля",
+            "марта",
+            "апреля",
+            "мая",
+            "июня",
+            "июля",
+            "августа",
+            "сентября",
+            "октября",
+            "ноября",
+            "декабря"
+        )
+        var res = ""
+        val parts = str.split(" ")
+        if (parts.size != 3) return ""
+        val numderMonth = month.indexOf(parts[1]) + 1
+        if (daysInMonth(numderMonth, parts[2].toInt()) >= parts[0].toInt())
+            res += if (parts[0].toInt() <= 9 && parts[0].first() != '0') "0" + parts[0] + "."
+            else parts[0] + "."
+        else return ""
+        if (parts[1] in month) {
+            res = if (numderMonth > 9)
+                res + numderMonth.toString() + "." + parts[2]
+            else res + "0" + numderMonth.toString() + "." + parts[2]
+        } else {
+            return ""
+        }
+        return res
+    } catch (e: Exception) {
         return ""
     }
-    return res
 
 }
 
