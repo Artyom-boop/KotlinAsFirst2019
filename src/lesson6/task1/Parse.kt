@@ -135,7 +135,19 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val result = phone.split("").toMutableList()
+    val matchResult = Regex("""(\+7/(/d/))?(\d)""").find(phone)
+    if (matchResult == null) {
+        return ""
+    } else {
+        result.removeAll(listOf(" "))
+        result.removeAll(listOf(")"))
+        result.removeAll(listOf("("))
+        result.removeAll(listOf("-"))
+        return result.joinToString(separator = "")
+    }
+}
 
 /**
  * Средняя
@@ -147,7 +159,20 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int? {
+    try {
+        val list = jumps.split(" ").toMutableList()
+        list.removeAll(listOf("%"))
+        list.removeAll(listOf("-"))
+        val listInt = mutableListOf<Int>()
+        if (list.isEmpty()) return -1
+        for (i in 0 until list.size)
+            listInt += list[i].toInt()
+        return listInt.max()
+    } catch (e: Exception) {
+        return -1
+    }
+}
 
 /**
  * Сложная
@@ -171,7 +196,20 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    return try {
+        val list = expression.split(" ")
+        var res = list[0].toInt()
+        for (i in 1 until list.size step 2) {
+            if (list[i] == "+")
+                res += list[i + 1].toInt()
+            else res -= list[i + 1].toInt()
+        }
+        res
+    } catch (e: Exception) {
+        throw IllegalArgumentException(e)
+    }
+}
 
 /**
  * Сложная
