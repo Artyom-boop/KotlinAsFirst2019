@@ -92,8 +92,7 @@ fun dateStrToDigit(str: String): String {
         if (parts.size != 3) return ""
         val numderMonth = month.indexOf(parts[1]) + 1
         if (daysInMonth(numderMonth, parts[2].toInt()) >= parts[0].toInt())
-            res += if (parts[0].toInt() <= 9 && parts[0].first() != '0') "0" + parts[0] + "."
-            else parts[0] + "."
+            res += twoDigitStr(parts[0].toInt()) + "."
         else return ""
         if (parts[1] in month) {
             res = if (numderMonth > 9)
@@ -137,7 +136,7 @@ fun dateDigitToStr(digital: String): String = TODO()
  */
 fun flattenPhoneNumber(phone: String): String {
     val result = phone.split("").toMutableList()
-    val matchResult = Regex("""(\+7/(/d/))?(\d)""").find(phone)
+    val matchResult = Regex("""(\+7)?(/(/d+/))?(\d)""").find(phone)
     if (matchResult == null) {
         return ""
     } else {
@@ -197,10 +196,12 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    val list = expression.split(" ")
+    require(list[0].first() != '-' && list[0].first() != '+')
     return try {
-        val list = expression.split(" ")
         var res = list[0].toInt()
         for (i in 1 until list.size step 2) {
+            require(list[i + 1].first() != '-' && list[i + 1].first() != '+')
             if (list[i] == "+")
                 res += list[i + 1].toInt()
             else res -= list[i + 1].toInt()
@@ -221,10 +222,10 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val list = str.split(" ")
+    val list = str.toLowerCase().split(" ")
     var count = list[0].length
     for (i in 1 until list.size) {
-        if (list[i].toLowerCase() == list[i - 1].toLowerCase()) return count - list[i - 1].length + i - 1
+        if (list[i] == list[i - 1]) return count - list[i - 1].length + i - 1
         count += list[i].length
     }
     return -1
@@ -243,24 +244,21 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     val list = description.split(";")
-    val map = mutableMapOf<String, Double>()
     var res = ""
-    try {
+    var max = -1.0
+    return try {
 
         for (element in list) {
             val elementMod = element.trim()
             val listMod = elementMod.split(" ")
-            map += (listMod[0] to listMod[1].toDouble())
-        }
-        var max = -1.0
-        for ((key, value) in map)
-            if (value > max) {
-                max = value
-                res = key
+            if (listMod[1].toDouble() > max) {
+                max = listMod[1].toDouble()
+                res = listMod[0]
             }
-        return res
+        }
+        res
     } catch (e: Exception) {
-        return ""
+        ""
     }
 }
 
@@ -313,4 +311,40 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    val res = MutableList(cells) { 0 }
+    var position = cells / 2
+    var lim = limit
+    var i = 0
+    val commandsList = commands.split("")
+    var count = 0
+    var count2 = 0
+    while (i < commandsList.size) {
+        if (count !=0) {
+            while (commandsList[i] != "]") {
+                if (commandsList[i] == "[") count++
+                i++
+            }
+        }
+        if (lim == 0) return res
+        if (commandsList[i] == "[") {
+            if (res[position] == 0) {
+                count++
+            } else {
+                count2++
+            }
+        }
+        if (commandsList[i] == "]")
+        when (commandsList[i]) {
+            ">" -> position++
+            "<" -> position--
+            "+" -> res[position] += 1
+            "-" -> res[position] -= 1
+            " " -> 1
+            else -> throw IllegalArgumentException(commandsList[i])
+        }
+        lim--
+        i++
+    }
+    return res
+}

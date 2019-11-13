@@ -94,10 +94,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    val res = mutableMapOf<Int, List<String>>()
+    val res = mutableMapOf<Int, MutableList<String>>()
     for ((name, grade) in grades) {
-        if (grade in res) res[grade] = res[grade]!!.plus(listOf(name))
-        else res[grade] = listOf(name)
+        if (grade in res) res[grade]?.add(name)
+        else res[grade] = mutableListOf(name)
     }
     return res
 }
@@ -255,7 +255,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
         } else map[element] = 1
     }
     for ((key, value) in map) if (value <= 1) delete += key
-    return map - delete
+    return map
 }
 
 /**
@@ -268,9 +268,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val list = words.map { it.toSet() }.toMutableSet()
-    if (words.size != list.size) return true
-    return false
+    val set = words.map { it.toSet() }.toSet()
+    return words.size != set.size
 }
 
 /**

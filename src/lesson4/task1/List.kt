@@ -306,17 +306,8 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (element in str) {
-        list += when (element) {
-            '0' -> 0
-            '1' -> 1
-            '2' -> 2
-            '3' -> 3
-            '4' -> 4
-            '5' -> 5
-            '6' -> 6
-            '7' -> 7
-            '8' -> 8
-            '9' -> 9
+        list += when (element.toInt() - 48) {
+            in 0..9 -> element.toInt() - 48
             else -> element.toInt() - 87
         }
     }
