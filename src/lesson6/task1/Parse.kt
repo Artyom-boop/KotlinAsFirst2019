@@ -183,6 +183,7 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    if (expression.isEmpty()) throw IllegalArgumentException()
     val list = expression.split(" ")
     require(list[0].first() != '-' && list[0].first() != '+')
     return try {
@@ -309,7 +310,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var count = 0
     val countList = mutableListOf<Int>()
     while (i < commandsList.size) {
-        check(!(position >= cells || position < 0))
         try {
             if (count != 0) {
                 while (commandsList[i] != "]") {
@@ -353,6 +353,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         } catch (e: Exception) {
             throw IllegalArgumentException()
         }
+        check(!(position >= cells || position < 0))
     }
     return if (result.isEmpty())
         res
