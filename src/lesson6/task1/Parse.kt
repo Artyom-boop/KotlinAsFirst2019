@@ -319,8 +319,9 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 if (commandsList[i] == "]") {
                     count--
-                    i++
                     lim++
+                    i++
+                    continue
                 }
             }
             if (lim == 0) result = result + res
