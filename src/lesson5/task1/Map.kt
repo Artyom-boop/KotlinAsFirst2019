@@ -181,7 +181,6 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val set = mutableSetOf<String>()
     val res = mutableMapOf<String, Double>()
     val mapCount = mutableMapOf<String, Int>()
     for ((name, price) in stockPrices) {
@@ -248,14 +247,12 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
-    var delete = listOf<String>()
     for (element in list) {
         if (element in map) {
             map[element] = map[element]!!.plus(1)
         } else map[element] = 1
     }
-    for ((key, value) in map) if (value <= 1) delete += key
-    return map
+    return map.filterValues { it > 1 }
 }
 
 /**

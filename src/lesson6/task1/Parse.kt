@@ -105,7 +105,6 @@ fun dateStrToDigit(str: String): String {
     } catch (e: Exception) {
         return ""
     }
-
 }
 
 /**
@@ -134,19 +133,7 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    val result = phone.split("").toMutableList()
-    val matchResult = Regex("""(\+7)?(/(/d+/))?(\d)""").find(phone)
-    if (matchResult == null) {
-        return ""
-    } else {
-        result.removeAll(listOf(" "))
-        result.removeAll(listOf(")"))
-        result.removeAll(listOf("("))
-        result.removeAll(listOf("-"))
-        return result.joinToString(separator = "")
-    }
-}
+fun flattenPhoneNumber(phone: String): String = TODO()
 
 /**
  * Средняя
@@ -247,7 +234,6 @@ fun mostExpensive(description: String): String {
     var res = ""
     var max = -1.0
     return try {
-
         for (element in list) {
             val elementMod = element.trim()
             val listMod = elementMod.split(" ")
@@ -316,35 +302,60 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var position = cells / 2
     var lim = limit
     var i = 0
-    val commandsList = commands.split("")
+    var result = listOf<Int>()
+    val commandsList = commands.split("").toMutableList()
+    commandsList.remove(commandsList.first())
+    commandsList.remove(commandsList.last())
     var count = 0
-    var count2 = 0
+    val countList = mutableListOf<Int>()
     while (i < commandsList.size) {
-        if (count !=0) {
-            while (commandsList[i] != "]") {
-                if (commandsList[i] == "[") count++
-                i++
+        check(!(position >= cells || position < 0))
+        try {
+            if (count != 0) {
+                while (commandsList[i] != "]") {
+                    if (commandsList[i] == "[") count++
+                    i++
+                    lim++
+                }
+                if (commandsList[i] == "]") {
+                    count--
+                    i++
+                    lim++
+                }
             }
-        }
-        if (lim == 0) return res
-        if (commandsList[i] == "[") {
-            if (res[position] == 0) {
-                count++
-            } else {
-                count2++
+            if (lim == 0) result = result + res
+            if (commandsList[i] == "[") {
+                if (res[position] == 0) {
+                    count++
+                } else {
+                    countList += i
+                }
             }
+            if (commandsList[i] == "]") {
+                if (res[position] != 0) {
+                    i = countList.last() + 1
+                    lim--
+                    continue
+                } else {
+                    countList.remove(countList.last())
+                }
+            }
+            when (commandsList[i]) {
+                ">" -> position++
+                "<" -> position--
+                "+" -> res[position] += 1
+                "-" -> res[position] -= 1
+                " ", "]", "[" -> 1
+                else -> throw IllegalArgumentException(commandsList[i])
+            }
+            lim--
+            i++
+        } catch (e: Exception) {
+            throw IllegalArgumentException()
         }
-        if (commandsList[i] == "]")
-        when (commandsList[i]) {
-            ">" -> position++
-            "<" -> position--
-            "+" -> res[position] += 1
-            "-" -> res[position] -= 1
-            " " -> 1
-            else -> throw IllegalArgumentException(commandsList[i])
-        }
-        lim--
-        i++
     }
-    return res
+    return if (result.isEmpty())
+        res
+    else
+        result
 }
