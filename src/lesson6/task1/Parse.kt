@@ -183,10 +183,10 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (expression.isEmpty() || expression == " ") throw IllegalArgumentException()
+    require(!(expression.isEmpty() || expression == " "))
     val list = expression.split(" ")
-    require(list[0].first() != '-' && list[0].first() != '+')
     return try {
+        require(list[0].first() != '-' && list[0].first() != '+')
         var res = list[0].toInt()
         for (i in 1 until list.size step 2) {
             require(list[i + 1].first() != '-' && list[i + 1].first() != '+')
@@ -308,6 +308,13 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     commandsList.remove(commandsList.first())
     commandsList.remove(commandsList.last())
     var count = 0
+    for (element in commandsList){
+        if (element == "[") count++
+        if (element == "]") count--
+        require(count >= 0)
+    }
+    require(count == 0)
+    count = 0
     val countList = mutableListOf<Int>()
     while (i < commandsList.size) {
         try {
@@ -324,7 +331,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     continue
                 }
             }
-            if (lim == 0) result = result + res
+            if (lim == 0) return res
             if (commandsList[i] == "[") {
                 if (res[position] == 0) {
                     count++
@@ -356,8 +363,5 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
         check(!(position >= cells || position < 0))
     }
-    return if (result.isEmpty())
-        res
-    else
-        result
+    return res
 }
