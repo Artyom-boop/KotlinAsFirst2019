@@ -318,20 +318,18 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     val countList = mutableListOf<Int>()
     while (i < commandsList.size) {
         try {
+            if (lim == 0) return res
             if (count != 0) {
                 while (commandsList[i] != "]") {
                     if (commandsList[i] == "[") count++
                     i++
-                    lim++
                 }
                 if (commandsList[i] == "]") {
                     count--
-                    lim++
                     i++
                     continue
                 }
             }
-            if (lim == 0) return res
             if (commandsList[i] == "[") {
                 if (res[position] == 0) {
                     count++
