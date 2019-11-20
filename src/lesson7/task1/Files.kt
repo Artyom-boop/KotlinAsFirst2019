@@ -154,6 +154,7 @@ fun top20Words(inputName: String): Map<String, Int> {
             else map[word] = 1
         }
     }
+    if ("" in map) map.remove("")
     val mapTop = mutableMapOf<String, Int>()
     if (map.size > 20) {
         while (mapTop.size <= 20) {
@@ -169,7 +170,6 @@ fun top20Words(inputName: String): Map<String, Int> {
             map.remove(maxKey)
         }
     } else return map
-    if ("" in mapTop) mapTop.remove("")
     return mapTop
 }
 
@@ -515,10 +515,10 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     str1 += "$lhv"
     digitTwo = rhv
-    while (str1.length != str2.length + rhv.toString().length) {
+    while (str1.length > str2.length + rhv.toString().length) {
         str2 += ' '
     }
-    while (str1.length != str3.length)
+    while (str1.length > str3.length)
         str3 += '-'
     writer.write(str1)
     writer.newLine()
@@ -527,7 +527,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     writer.write(str3)
     var digitRes = lhv * (digitTwo % 10)
     digitTwo /= 10
-    while (str1.length != str4.length + digitRes.toString().length)
+    while (str1.length > str4.length + digitRes.toString().length)
         str4 += ' '
     writer.newLine()
     writer.write(str4 + digitRes.toString())
@@ -536,7 +536,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
         str4 = "+"
         digitRes = lhv * (digitTwo % 10)
         digitTwo /= 10
-        while (str1.length != str4.length + digitRes.toString().length + count)
+        while (str1.length > str4.length + digitRes.toString().length + count)
             str4 += ' '
         writer.newLine()
         writer.write(str4 + digitRes.toString())
