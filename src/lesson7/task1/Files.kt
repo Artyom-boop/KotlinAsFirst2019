@@ -286,7 +286,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val lines = File(inputName).readLines()
+    val lines = File(inputName).readLines().toMutableList()
     val writer = File(outputName).bufferedWriter()
     writer.write("<html>")
     writer.newLine()
@@ -295,6 +295,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         writer.newLine()
         writer.write("<p>")
     }
+    while (lines[0].isEmpty())
+        lines.remove(lines[0])
     val list = mutableListOf("")
     for (i in lines.indices) {
         var line = lines[i]
