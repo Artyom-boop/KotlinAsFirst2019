@@ -291,10 +291,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("<html>")
     writer.newLine()
     writer.write("<body>")
-    if (lines.isNotEmpty()) {
-        writer.newLine()
-        writer.write("<p>")
-    }
+    writer.write("<p>")
     try {
         while (lines[0].isEmpty())
             lines.remove(lines[0])
