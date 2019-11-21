@@ -295,6 +295,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         writer.newLine()
         writer.write("<p>")
     }
+    val list = mutableListOf("")
     for (i in lines.indices) {
         var line = lines[i]
         if (line.isEmpty() && lines[i + 1].isNotEmpty()) {
@@ -307,7 +308,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         line += "  "
         writer.newLine()
         var i = 0
-        val list = mutableListOf("")
         while (i < line.length - 2) {
             if (line[i] == '*' && line[i + 2] == '*' && line[i + 1] == '*') {
                 writer.write("</b></i>")
