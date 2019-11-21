@@ -360,7 +360,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 i++
             }
         }
-    } finally {
+        writer.write("</p>")
+        writer.write("</body>")
+        writer.newLine()
+        writer.write("</html>")
+        writer.close()
+    } catch (e: Exception) {
         writer.write("</p>")
         writer.write("</body>")
         writer.newLine()
