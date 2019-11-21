@@ -157,7 +157,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     if ("" in map) map.remove("")
     val mapTop = mutableMapOf<String, Int>()
     if (map.size > 20) {
-        while (mapTop.size <= 20) {
+        while (mapTop.size < 20) {
             var max = 0
             var maxKey = ""
             for ((key, value) in map)
@@ -295,7 +295,8 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         writer.newLine()
         writer.write("<p>")
     }
-    for (line in lines) {
+    for (i in lines.indices) {
+        var line = lines[i]
         if (line.isEmpty()) {
             writer.newLine()
             writer.write("</p>")
@@ -303,10 +304,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             writer.write("<p>")
             continue
         }
+        line += "  "
         writer.newLine()
         var i = 0
         val list = mutableListOf("")
-        while (i != line.length) {
+        while (i < line.length - 2) {
             if (line[i] == '*' && line[i + 2] == '*' && line[i + 1] == '*') {
                 writer.write("</b></i>")
                 i += 3
