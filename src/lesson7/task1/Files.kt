@@ -512,56 +512,7 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    var digitTwo = rhv
-    var str1 = ""
-    if (rhv.toString().length >= lhv.toString().length)
-        str1 = " "
-    var str2 = "*"
-    var str3 = ""
-    var str4 = ""
-    while (digitTwo != 0) {
-        str1 += ' '
-        digitTwo /= 10
-    }
-    str1 += "$lhv"
-    digitTwo = rhv
-    while (str1.length > str3.length)
-        str3 += '-'
-    while (str3.length > str2.length + rhv.toString().length) {
-        str2 += ' '
-    }
-    writer.write(str1)
-    writer.newLine()
-    writer.write(str2 + "$digitTwo")
-    writer.newLine()
-    writer.write(str3)
-    var digitRes = lhv * (digitTwo % 10)
-    digitTwo /= 10
-    while (str3.length > str4.length + digitRes.toString().length)
-        str4 += ' '
-    writer.newLine()
-    writer.write(str4 + digitRes.toString())
-    var count = 1
-    while (digitTwo != 0) {
-        str4 = "+"
-        digitRes = lhv * (digitTwo % 10)
-        digitTwo /= 10
-        while (str3.length > str4.length + digitRes.toString().length + count)
-            str4 += ' '
-        writer.newLine()
-        writer.write(str4 + digitRes.toString())
-        count++
-    }
-    digitRes = lhv * rhv
-    str4 = ""
-    while (str3.length > str4.length + digitRes.toString().length)
-        str4 += ' '
-    writer.newLine()
-    writer.write(str3)
-    writer.newLine()
-    writer.write(str4 + digitRes.toString())
-    writer.close()
+    TODO()
 }
 
 
