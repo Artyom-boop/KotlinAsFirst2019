@@ -515,7 +515,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var digitTwo = rhv
     var str1 = ""
-    if (rhv.toString().length >= lhv.toString().length && rhv > 9)
+    if (rhv.toString().length >= lhv.toString().length && rhv > 9 && lhv > 9)
         str1 = " "
     var str2 = "*"
     var str3 = ""
