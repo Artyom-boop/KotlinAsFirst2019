@@ -515,13 +515,15 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var digitTwo = rhv
     var str1 = ""
+    if (rhv.toString().length >= lhv.toString().length)
+        str1 = " "
     var str2 = "*"
     var str3 = ""
     var str4 = ""
-        while (digitTwo != 0) {
-            str1 += ' '
-            digitTwo /= 10
-        }
+    while (digitTwo != 0) {
+        str1 += ' '
+        digitTwo /= 10
+    }
     str1 += "$lhv"
     digitTwo = rhv
     while (str1.length > str2.length + rhv.toString().length) {
@@ -536,7 +538,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     writer.write(str3)
     var digitRes = lhv * (digitTwo % 10)
     digitTwo /= 10
-    while (str1.length > str4.length + digitRes.toString().length)
+    while (str3.length > str4.length + digitRes.toString().length)
         str4 += ' '
     writer.newLine()
     writer.write(str4 + digitRes.toString())
@@ -545,7 +547,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
         str4 = "+"
         digitRes = lhv * (digitTwo % 10)
         digitTwo /= 10
-        while (str1.length > str4.length + digitRes.toString().length + count)
+        while (str3.length > str4.length + digitRes.toString().length + count)
             str4 += ' '
         writer.newLine()
         writer.write(str4 + digitRes.toString())
@@ -553,12 +555,10 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     digitRes = lhv * rhv
     str4 = ""
-    if (rhv.toString().length >= lhv.toString().length)
-        str4 += " "
+    while (str3.length > str4.length + digitRes.toString().length)
+        str4 += ' '
     writer.newLine()
     writer.write(str3)
-    while (str1.length > str4.length + digitRes.toString().length)
-        str4 += ' '
     writer.newLine()
     writer.write(str4 + digitRes.toString())
     writer.close()
