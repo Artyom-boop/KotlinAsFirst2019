@@ -154,6 +154,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     for (line in lines) {
         var count = 0
         val list = line.split(Regex("\\s")).toMutableList()
+        list.removeAll(listOf(""))
         for (i in 0..list.size - 2) {
             list[i] += " "
         }
