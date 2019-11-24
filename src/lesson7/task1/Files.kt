@@ -142,8 +142,37 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val lines = File(inputName).readLines().toMutableList()
+    var max = 0
+    for (i in lines.indices) {
+        val line = lines[i].trim()
+        lines[i] = line
+        if (max < line.length)
+            max = line.length
+    }
+    val writer = File(outputName).bufferedWriter()
+    for (line in lines) {
+        var count = 0
+        val list = line.split(Regex("\\s")).toMutableList()
+        for (i in 0..list.size - 2) {
+            list[i] += " "
+        }
+        while (line.length + count < max) {
+            if (list.size < 2)
+                count += max
+            for (i in 0..list.size - 2) {
+                list[i] += " "
+                count++
+                if (line.length + count >= max)
+                    break
+            }
+        }
+        writer.write(list.joinToString(separator = ""))
+        writer.newLine()
+    }
+    writer.close()
 }
+
 
 /**
  * Средняя
@@ -259,7 +288,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var res = ""
     var max = 0
     for (line in lines) {
-       val set = line.toLowerCase().toSet()
+        val set = line.toLowerCase().toSet()
         if (set.size == line.length) {
             if (max == line.length)
                 res += ", $line"
