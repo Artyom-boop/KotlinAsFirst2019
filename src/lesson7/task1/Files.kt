@@ -101,8 +101,6 @@ fun centerFile(inputName: String, outputName: String) {
         if (max < line.length)
             max = line.length
     }
-    if (max % 2 == 0)
-        max--
     val writer = File(outputName).bufferedWriter()
     for (line in lines) {
         var count = 0
