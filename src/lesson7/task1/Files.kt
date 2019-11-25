@@ -158,7 +158,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         for (i in 0..list.size - 2) {
             list[i] += " "
         }
-        while (line.length + count < max) {
+        val str = list.joinToString(separator = "")
+        while (str.length + count < max) {
             if (list.size < 2)
                 count += max
             for (i in 0..list.size - 2) {
