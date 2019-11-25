@@ -165,7 +165,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             for (i in 0..list.size - 2) {
                 list[i] += " "
                 count++
-                if (line.length + count >= max)
+                if (str.length + count >= max)
                     break
             }
         }
