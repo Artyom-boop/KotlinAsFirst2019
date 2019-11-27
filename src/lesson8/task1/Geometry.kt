@@ -172,8 +172,7 @@ class Line private constructor(val b: Double, val angle: Double) {
  */
 fun lineBySegment(s: Segment): Line {
     val delY = abs(s.begin.y - s.end.y)
-    var angle = asin(delY / s.begin.distance(s.end))
-    if (s.end.y < s.begin.y) angle = PI - angle
+    val angle = asin(delY / s.begin.distance(s.end))
     return Line(s.begin, angle)
 }
 
