@@ -171,9 +171,10 @@ class Line private constructor(val b: Double, val angle: Double) {
  * Построить прямую по отрезку
  */
 fun lineBySegment(s: Segment): Line {
-    val delY = abs(s.begin.y - s.end.y)
-    var angle = asin(delY / s.begin.distance(s.end))
-    if (s.end.y < s.begin.y && s.end.x > s.begin.x) angle = PI - angle
+    val delY = s.begin.y - s.end.y
+    var hypotenuse = s.begin.distance(s.end)
+    if (s.begin.x - s.end.x < 0) hypotenuse *= -1
+    val angle = (asin(delY / hypotenuse) + PI) % PI
     return Line(s.begin, angle)
 }
 
@@ -192,7 +193,9 @@ fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 fun bisectorByPoints(a: Point, b: Point): Line {
     val resPoint = Point(((a.x + b.x) / 2), ((a.y + b.y) / 2))
     val delY = a.y - b.y
-    var angle = asin(delY / a.distance(b)) + PI / 2
+    var hypotenuse = a.distance(b)
+    if (a.x - b.x < 0) hypotenuse *= -1
+    var angle = (asin(delY / hypotenuse) + PI) % PI + PI / 2
     if (angle >= PI)
         angle -= PI
     return Line(resPoint, angle)
