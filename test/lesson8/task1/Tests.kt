@@ -208,7 +208,7 @@ class Tests {
     @Test
     @Tag("Hard")
     fun circleByThreePoints() {
-        val result = circleByThreePoints(Point(-5e-324, -632.0), Point(-632.0, -632.0), Point(0.0, 0.0))
+        val result = circleByThreePoints(Point(5.0, 0.0), Point(3.0, 4.0), Point(0.0, -5.0))
         assertTrue(result.center.distance(Point(0.0, 0.0)) < 1e-5)
         assertEquals(5.0, result.radius, 1e-5)
     }
