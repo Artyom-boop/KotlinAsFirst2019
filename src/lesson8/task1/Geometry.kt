@@ -153,7 +153,7 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
     fun crossPoint(other: Line): Point {
-        val x = (b - other.b * cos(angle) / cos(other.angle)) / (tan(other.angle) * cos(angle) - sin(angle))
+        val x = ((b - other.b * cos(angle) / cos(other.angle)) / (tan(other.angle) * cos(angle) - sin(angle)))
         val y = (x * sin(other.angle) + other.b) / cos(other.angle)
         return Point(x, y)
     }
@@ -237,8 +237,8 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
  */
 fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val ab = bisectorByPoints(a, b)
-    val bc = bisectorByPoints(b, c)
-    val center = ab.crossPoint(bc)
+    val bc = bisectorByPoints(c, b)
+    val center = bc.crossPoint(ab)
     return Circle(center, center.distance(a))
 }
 
