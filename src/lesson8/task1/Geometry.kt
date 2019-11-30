@@ -154,7 +154,7 @@ class Line private constructor(val b: Double, val angle: Double) {
      */
     fun crossPoint(other: Line): Point {
         val x = ((b - other.b * cos(angle) / cos(other.angle)) / (tan(other.angle) * cos(angle) - sin(angle)))
-        val y = (x * sin(other.angle) + other.b) / cos(other.angle)
+        val y = (other.b * sin(angle) - b * sin(other.angle)) / sin(angle - other.angle)
         return Point(x, y)
     }
 
@@ -239,10 +239,7 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val ab = bisectorByPoints(a, b)
     val bc = bisectorByPoints(c, b)
     val center: Point
-    center = if (a.x > b.x && a.x > c.x)
-        bc.crossPoint(ab)
-    else
-        ab.crossPoint(bc)
+    center = ab.crossPoint(bc)
     return Circle(center, center.distance(a))
 }
 
