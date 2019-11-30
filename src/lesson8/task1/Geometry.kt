@@ -260,8 +260,10 @@ fun minContainingCircle(vararg points: Point): Circle {
         return Circle(points[0], 0.0)
     var max = 0.0
     var p1 = points[0]
-    var p2 = points[0]
+    var p2 = points[1]
     var p3 = points[0]
+    if (points.size > 2)
+        p3 = points[3]
     for (i in 0..points.size - 2)
         for (j in i + 1 until points.size) {
             val dist = points[i].distance(points[j])
@@ -274,10 +276,11 @@ fun minContainingCircle(vararg points: Point): Circle {
     val midPoint = Point(((p1.x + p2.x) / 2), ((p1.y + p2.y) / 2))
     if (points.size <= 2)
         return Circle(midPoint, p1.distance(midPoint))
+    val control = p1.distance(midPoint)
     max = 0.0
     for (i in points.indices) {
         val dist = points[i].distance(midPoint)
-        if (max < dist) {
+        if (max < dist && dist >= control) {
             max = dist
             p3 = points[i]
         }
