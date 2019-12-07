@@ -243,7 +243,7 @@ fun mostExpensive(description: String): String {
             }
         }
         res
-    } catch (e: IllegalArgumentException) {
+    } catch (e: Exception) {
         ""
     }
 }
