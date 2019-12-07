@@ -71,22 +71,23 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
+val month = listOf(
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря"
+)
+
 fun dateStrToDigit(str: String): String {
     try {
-        val month = listOf(
-            "января",
-            "февраля",
-            "марта",
-            "апреля",
-            "мая",
-            "июня",
-            "июля",
-            "августа",
-            "сентября",
-            "октября",
-            "ноября",
-            "декабря"
-        )
         var res = ""
         val parts = str.split(" ")
         if (parts.size != 3) return ""
@@ -95,14 +96,12 @@ fun dateStrToDigit(str: String): String {
             res += twoDigitStr(parts[0].toInt()) + "."
         else return ""
         if (parts[1] in month) {
-            res = if (numderMonth > 9)
-                res + numderMonth.toString() + "." + parts[2]
-            else res + "0" + numderMonth.toString() + "." + parts[2]
+            res += twoDigitStr(numderMonth) + "." + parts[2]
         } else {
             return ""
         }
         return res
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         return ""
     }
 }
@@ -155,7 +154,7 @@ fun bestLongJump(jumps: String): Int? {
         for (i in 0 until list.size)
             listInt += list[i].toInt()
         return listInt.max()
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         return -1
     }
 }
@@ -195,7 +194,7 @@ fun plusMinus(expression: String): Int {
             else res -= list[i + 1].toInt()
         }
         res
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         throw IllegalArgumentException(e)
     }
 }
@@ -244,7 +243,7 @@ fun mostExpensive(description: String): String {
             }
         }
         res
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
         ""
     }
 }
@@ -303,12 +302,11 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var position = cells / 2
     var lim = limit
     var i = 0
-    var result = listOf<Int>()
     val commandsList = commands.split("").toMutableList()
     commandsList.remove(commandsList.first())
     commandsList.remove(commandsList.last())
     var count = 0
-    for (element in commandsList){
+    for (element in commandsList) {
         if (element == "[") count++
         if (element == "]") count--
         require(count >= 0)
@@ -330,13 +328,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     continue
                 }
             }
-            if (commandsList[i] == "[") {
-                if (res[position] == 0) {
-                    count++
-                } else {
-                    countList += i
-                }
-            }
             if (commandsList[i] == "]") {
                 if (res[position] != 0) {
                     i = countList.last() + 1
@@ -347,16 +338,23 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
             }
             when (commandsList[i]) {
+                "[" -> {
+                    if (res[position] == 0) {
+                        count++
+                    } else {
+                        countList += i
+                    }
+                }
                 ">" -> position++
                 "<" -> position--
                 "+" -> res[position] += 1
                 "-" -> res[position] -= 1
-                " ", "]", "[" -> 1
+                " ", "]" -> 1
                 else -> throw IllegalArgumentException(commandsList[i])
             }
             lim--
             i++
-        } catch (e: Exception) {
+        } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException()
         }
         check(!(position >= cells || position < 0))

@@ -53,9 +53,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    TODO()
-}
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
 
 
 /**
@@ -300,9 +298,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
             }
         }
     }
-    var writer = File(outputName).bufferedWriter()
-    writer.write(res)
-    writer.close()
+    File(outputName).writeText(res)
 }
 
 /**
@@ -357,83 +353,75 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.newLine()
     writer.write("<body>")
     writer.write("<p>")
-    try {
-        while (lines[0].isEmpty())
-            lines.remove(lines[0])
-        val list = mutableListOf("")
-        for (i in lines.indices) {
-            var line = lines[i]
-            if (line.isEmpty() && lines[i + 1].isNotEmpty()) {
-                writer.newLine()
-                writer.write("</p>")
-                writer.newLine()
-                writer.write("<p>")
+    while (lines[0].isEmpty())
+        lines.remove(lines[0])
+    val list = mutableListOf("")
+    for (i in lines.indices) {
+        var line = lines[i]
+        if (line.isEmpty() && lines[i + 1].isNotEmpty()) {
+            writer.newLine()
+            writer.write("</p>")
+            writer.newLine()
+            writer.write("<p>")
+            continue
+        }
+        line += "  "
+        writer.newLine()
+        var i = 0
+        while (i < line.length - 2) {
+            if (line[i] == '*' && line[i + 2] == '*' && line[i + 1] == '*') {
+                writer.write("</b></i>")
+                i += 3
                 continue
             }
-            line += "  "
-            writer.newLine()
-            var i = 0
-            while (i < line.length - 2) {
-                if (line[i] == '*' && line[i + 2] == '*' && line[i + 1] == '*') {
-                    writer.write("</b></i>")
-                    i += 3
+            if (line[i] == '*' && line[i + 1] == '*') {
+                if (list.last() == "**") {
+                    writer.write("</b>")
+                    list.remove(list.last())
+                    i += 2
+                    continue
+                } else {
+                    writer.write("<b>")
+                    i += 2
+                    list += "**"
                     continue
                 }
-                if (line[i] == '*' && line[i + 1] == '*') {
-                    if (list.last() == "**") {
-                        writer.write("</b>")
-                        list.remove(list.last())
-                        i += 2
-                        continue
-                    } else {
-                        writer.write("<b>")
-                        i += 2
-                        list += "**"
-                        continue
-                    }
-                }
-                if (line[i] == '*') {
-                    if (list.last() == "*") {
-                        writer.write("</i>")
-                        list.remove(list.last())
-                        i += 1
-                        continue
-                    } else {
-                        writer.write("<i>")
-                        i += 1
-                        list += "*"
-                        continue
-                    }
-                }
-                if (line[i] == '~') {
-                    if (list.last() == "~~") {
-                        writer.write("</s>")
-                        list.remove(list.last())
-                        i += 2
-                        continue
-                    } else {
-                        writer.write("<s>")
-                        i += 2
-                        list += "~~"
-                        continue
-                    }
-                }
-                writer.write("${line[i]}")
-                i++
             }
+            if (line[i] == '*') {
+                if (list.last() == "*") {
+                    writer.write("</i>")
+                    list.remove(list.last())
+                    i += 1
+                    continue
+                } else {
+                    writer.write("<i>")
+                    i += 1
+                    list += "*"
+                    continue
+                }
+            }
+            if (line[i] == '~') {
+                if (list.last() == "~~") {
+                    writer.write("</s>")
+                    list.remove(list.last())
+                    i += 2
+                    continue
+                } else {
+                    writer.write("<s>")
+                    i += 2
+                    list += "~~"
+                    continue
+                }
+            }
+            writer.write("${line[i]}")
+            i++
         }
-        writer.write("</p>")
-        writer.write("</body>")
-        writer.newLine()
-        writer.write("</html>")
-        writer.close()
-    } catch (e: Exception) {
-        writer.write("</p>")
-        writer.write("</body>")
-        writer.newLine()
-        writer.write("</html>")
-        writer.close()
     }
+    writer.write("</p>")
+    writer.write("</body>")
+    writer.newLine()
+    writer.write("</html>")
+    writer.close()
 }
 
 /**
