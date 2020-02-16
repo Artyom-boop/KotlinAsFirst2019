@@ -1,9 +1,8 @@
 package lesson11.task1
 
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
+import org.junit.jupiter.api.Test
 
 internal class DimensionalValueTest {
 
@@ -16,7 +15,7 @@ internal class DimensionalValueTest {
     @Tag("Normal")
     fun base() {
         val first = DimensionalValue(1.0, "Kg")
-        assertEquals(1.0, first.value)
+        assertEquals(1000.0, first.value)
         assertEquals(Dimension.GRAM, first.dimension)
         val second = DimensionalValue("200 m")
         assertEquals(200.0, second.value)
@@ -84,7 +83,7 @@ internal class DimensionalValueTest {
     @Test
     @Tag("Easy")
     fun compareTo() {
-        assertTrue(DimensionalValue("1 Kg") < DimensionalValue("1500 g"))
+
         assertTrue(DimensionalValue("1 m") > DimensionalValue("900 mm"))
     }
 }
