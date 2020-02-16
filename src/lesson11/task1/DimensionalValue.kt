@@ -2,6 +2,8 @@
 
 package lesson11.task1
 
+import kotlin.math.abs
+
 /**
  * Класс "Величина с размерностью".
  *
@@ -17,61 +19,98 @@ package lesson11.task1
  * - во всех остальных случаях следует бросить IllegalArgumentException
  */
 class DimensionalValue(value: Double, dimension: String) : Comparable<DimensionalValue> {
+    val d = dimension
+    val v = value
     /**
      * Величина с БАЗОВОЙ размерностью (например для 1.0Kg следует вернуть результат в граммах -- 1000.0)
      */
-    val value: Double get() = TODO()
+    val value: Double
+        get() {
+            if (d.first() == 'K')
+                return v * 1000
+            if (d.first() == 'm' && d.length > 1)
+                return v * 0.001
+            return v
+        }
+
 
     /**
      * БАЗОВАЯ размерность (опять-таки для 1.0Kg следует вернуть GRAM)
      */
-    val dimension: Dimension get() = TODO()
+    val dimension: Dimension
+        get() {
+            when (d.last()) {
+                'g' -> return Dimension.GRAM
+                'm' -> return Dimension.METER
+            }
+            return throw IllegalArgumentException()
+        }
 
     /**
      * Конструктор из строки. Формат строки: значение пробел размерность (1 Kg, 3 mm, 100 g и так далее).
      */
-    constructor(s: String) : this(TODO(), TODO())
+    constructor(s: String) : this(s.split(" ")[0].toDouble(), s.split(" ")[1])
 
     /**
      * Сложение с другой величиной. Если базовая размерность разная, бросить IllegalArgumentException
      * (нельзя складывать метры и килограммы)
      */
-    operator fun plus(other: DimensionalValue): DimensionalValue = TODO()
+    operator fun plus(other: DimensionalValue): DimensionalValue {
+        require(dimension == other.dimension)
+        return DimensionalValue(value + other.value, dimension.abbreviation)
+    }
 
     /**
      * Смена знака величины
      */
-    operator fun unaryMinus(): DimensionalValue = TODO()
+    operator fun unaryMinus(): DimensionalValue = DimensionalValue(value * (-1), dimension.abbreviation)
 
     /**
      * Вычитание другой величины. Если базовая размерность разная, бросить IllegalArgumentException
      */
-    operator fun minus(other: DimensionalValue): DimensionalValue = TODO()
+    operator fun minus(other: DimensionalValue): DimensionalValue {
+        require(dimension == other.dimension)
+        return DimensionalValue(value - other.value, dimension.abbreviation)
+    }
 
     /**
      * Умножение на число
      */
-    operator fun times(other: Double): DimensionalValue = TODO()
+    operator fun times(other: Double): DimensionalValue = DimensionalValue(value * other, dimension.abbreviation)
 
     /**
      * Деление на число
      */
-    operator fun div(other: Double): DimensionalValue = TODO()
+    operator fun div(other: Double): DimensionalValue = DimensionalValue(value / other, dimension.abbreviation)
 
     /**
      * Деление на другую величину. Если базовая размерность разная, бросить IllegalArgumentException
      */
-    operator fun div(other: DimensionalValue): Double = TODO()
+    operator fun div(other: DimensionalValue): Double  {
+        require(dimension == other.dimension)
+        return value / other.value
+    }
 
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = other is DimensionalValue && value == other.value
 
     /**
      * Сравнение на больше/меньше. Если базовая размерность разная, бросить IllegalArgumentException
      */
-    override fun compareTo(other: DimensionalValue): Int = TODO()
+    override fun compareTo(other: DimensionalValue): Int {
+        require(dimension == other.dimension)
+        val diff = value - other.value
+        if (diff == 0.0) return 0
+        return (diff / abs(diff)).toInt()
+    }
+
+    override fun hashCode(): Int {
+        var result = d.hashCode()
+        result = 31 * result + v.hashCode()
+        return result
+    }
 }
 
 /**
