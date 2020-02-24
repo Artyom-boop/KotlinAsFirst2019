@@ -26,10 +26,10 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val value: Double
         get() {
-            if (d.first() == 'K')
-                return v * 1000
-            if (d.first() == 'm' && d.length > 1)
-                return v * 0.001
+            if (d.first().toString() == DimensionPrefix.KILO.abbreviation)
+                return v * DimensionPrefix.KILO.multiplier
+            if (d.first().toString() == DimensionPrefix.MILLI.abbreviation && d.length > 1)
+                return v * DimensionPrefix.MILLI.multiplier
             return v
         }
 
@@ -39,11 +39,11 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val dimension: Dimension
         get() {
-            when (d.last()) {
-                'g' -> return Dimension.GRAM
-                'm' -> return Dimension.METER
+            return when (d.last().toString()) {
+                Dimension.GRAM.abbreviation -> Dimension.GRAM
+                Dimension.METER.abbreviation -> Dimension.METER
+                else -> throw IllegalArgumentException()
             }
-            return throw IllegalArgumentException()
         }
 
     /**
@@ -86,7 +86,7 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     /**
      * Деление на другую величину. Если базовая размерность разная, бросить IllegalArgumentException
      */
-    operator fun div(other: DimensionalValue): Double  {
+    operator fun div(other: DimensionalValue): Double {
         require(dimension == other.dimension)
         return value / other.value
     }
@@ -94,7 +94,8 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = other is DimensionalValue && value == other.value
+    override fun equals(other: Any?): Boolean =
+        other is DimensionalValue && value == other.value && dimension == other.dimension
 
     /**
      * Сравнение на больше/меньше. Если базовая размерность разная, бросить IllegalArgumentException
