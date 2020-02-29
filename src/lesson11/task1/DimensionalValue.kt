@@ -26,6 +26,7 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val value: Double
         get() {
+            require(d.last() == 'g' || d.last() == 'm')
             if (d.first().toString() == DimensionPrefix.KILO.abbreviation)
                 return v * DimensionPrefix.KILO.multiplier
             if (d.first().toString() == DimensionPrefix.MILLI.abbreviation && d.length > 1)
@@ -39,11 +40,16 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val dimension: Dimension
         get() {
-            return when (d.last().toString()) {
-                Dimension.GRAM.abbreviation -> Dimension.GRAM
-                Dimension.METER.abbreviation -> Dimension.METER
-                else -> throw IllegalArgumentException()
+            if (d.length == 2)
+                require(d.first() == 'K' || d.first() == 'm')
+            if (d.length == 1 || d.length == 2) {
+                return when (d.last().toString()) {
+                    Dimension.GRAM.abbreviation -> Dimension.GRAM
+                    Dimension.METER.abbreviation -> Dimension.METER
+                    else -> throw IllegalArgumentException()
+                }
             }
+            throw IllegalArgumentException()
         }
 
     /**
@@ -103,7 +109,6 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     override fun compareTo(other: DimensionalValue): Int {
         require(dimension == other.dimension)
         val diff = value - other.value
-        if (diff == 0.0) return 0
         return (diff / abs(diff)).toInt()
     }
 

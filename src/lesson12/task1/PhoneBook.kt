@@ -18,7 +18,7 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
-    val list = mutableMapOf<String, MutableSet<String>>()
+    private val book = mutableMapOf<String, MutableSet<String>>()
 
     /**
      * Добавить человека.
@@ -27,10 +27,8 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun addHuman(name: String): Boolean {
-        for (i in list) {
-            if (i.key == name) return false
-        }
-        list += (name to mutableSetOf())
+        if (name in book) return false
+        book += (name to mutableSetOf())
         return true
     }
 
@@ -41,11 +39,9 @@ class PhoneBook {
      * (во втором случае телефонная книга не должна меняться).
      */
     fun removeHuman(name: String): Boolean {
-        for (i in list) {
-            if (i.key == name) {
-                list.remove(name)
-                return true
-            }
+        if (name in book) {
+            book.remove(name)
+            return true
         }
         return false
     }
@@ -58,15 +54,13 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        for (i in list) {
+        for (i in book) {
             if (phone in i.value)
                 return false
         }
-        for (i in list) {
-            if (i.key == name) {
-                list[i.key]?.plusAssign(phone)
-                return true
-            }
+        if (name in book) {
+            book[name]?.plusAssign(phone)
+            return true
         }
         return false
     }
@@ -78,9 +72,9 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean {
-        for (i in list)
-            if (i.key == name && phone in i.value) {
-                i.value.remove(phone)
+        for ((key, value) in book)
+            if (key == name && phone in value) {
+                value.remove(phone)
                 return true
             }
         return false
@@ -92,9 +86,8 @@ class PhoneBook {
      */
     fun phones(name: String): Set<String> {
         val result = mutableSetOf<String>()
-        for (i in list)
-            if (i.key == name)
-                result += i.value
+        if (name in book)
+            result += book[name]!!
         return result
     }
 
@@ -103,9 +96,9 @@ class PhoneBook {
      * Если такого номера нет в книге, вернуть null.
      */
     fun humanByPhone(phone: String): String? {
-        for (i in list)
-            if (phone in i.value)
-                return i.key
+        for ((key, value) in book)
+            if (phone in value)
+                return key
         return null
     }
 
@@ -116,18 +109,10 @@ class PhoneBook {
      */
     override fun equals(other: Any?): Boolean {
         if (other !is PhoneBook) return false
-        val book1 = mutableListOf<Pair<String, Set<String>>>()
-        val book2 = mutableListOf<Pair<String, Set<String>>>()
-        for (i in list)
-            book1 += Pair(i.key, i.value)
-        for (i in list)
-            book2 += Pair(i.key, i.value)
-        if (book1.toSet() == book2.toSet())
-            return true
-        return false
+        return other.book == book
     }
 
-    override fun hashCode(): Int = list.hashCode()
+    override fun hashCode(): Int = book.hashCode()
 
 
 }
