@@ -2,8 +2,6 @@
 
 package lesson11.task1
 
-import kotlin.math.abs
-
 /**
  * Класс "Величина с размерностью".
  *
@@ -26,11 +24,10 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val value: Double
         get() {
-            require(d.last() == 'g' || d.last() == 'm')
-            if (d.first().toString() == DimensionPrefix.KILO.abbreviation)
-                return v * DimensionPrefix.KILO.multiplier
-            if (d.first().toString() == DimensionPrefix.MILLI.abbreviation && d.length > 1)
-                return v * DimensionPrefix.MILLI.multiplier
+            if (DimensionPrefix.values().find { it.abbreviation == d.first().toString() } != null && d.length > 1
+                && Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null) {
+                return v * (DimensionPrefix.values().find { it.abbreviation == d.first().toString() }?.multiplier!!)
+            }
             return v
         }
 
@@ -40,14 +37,11 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val dimension: Dimension
         get() {
-            if (d.length == 2)
-                require(d.first() == 'K' || d.first() == 'm')
-            if (d.length == 1 || d.length == 2) {
-                return when (d.last().toString()) {
-                    Dimension.GRAM.abbreviation -> Dimension.GRAM
-                    Dimension.METER.abbreviation -> Dimension.METER
-                    else -> throw IllegalArgumentException()
-                }
+            if (d.length > 1 && DimensionPrefix.values().find { it.abbreviation == d.first().toString() } != null)
+                if (Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null)
+                    return Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) }!!
+            if (Dimension.values().find { it.abbreviation == d } != null) {
+                return (Dimension.values().find { it.abbreviation == d }!!)
             }
             throw IllegalArgumentException()
         }
@@ -108,8 +102,11 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     override fun compareTo(other: DimensionalValue): Int {
         require(dimension == other.dimension)
-        val diff = value - other.value
-        return (diff / abs(diff)).toInt()
+        return when {
+            value > other.value -> 1
+            value < other.value -> -1
+            else -> 0
+        }
     }
 
     override fun hashCode(): Int {

@@ -72,9 +72,9 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean {
-        for ((key, value) in book)
-            if (key == name && phone in value) {
-                value.remove(phone)
+        if (name in book)
+            if (phone in book[name]!!) {
+                book[name]!!.remove(phone)
                 return true
             }
         return false
@@ -85,10 +85,9 @@ class PhoneBook {
      * Если этого человека нет в книге, вернуть пустой список
      */
     fun phones(name: String): Set<String> {
-        val result = mutableSetOf<String>()
-        if (name in book)
-            result += book[name]!!
-        return result
+        if (book[name] != null)
+            return book[name]!!
+        return setOf()
     }
 
     /**
