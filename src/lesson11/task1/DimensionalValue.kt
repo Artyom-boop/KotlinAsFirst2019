@@ -106,11 +106,7 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     override fun compareTo(other: DimensionalValue): Int {
         require(dimension == other.dimension)
-        return when {
-            value > other.value -> 1
-            value < other.value -> -1
-            else -> 0
-        }
+        return ((value - other.value) / kotlin.math.abs(value - other.value)).toInt()
     }
 
     override fun hashCode(): Int {
