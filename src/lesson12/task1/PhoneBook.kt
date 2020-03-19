@@ -72,11 +72,10 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean {
-        if (name in book)
-            if (phone in book[name]!!) {
-                book[name]!!.remove(phone)
-                return true
-            }
+        if (book[name]?.contains(phone) == true) {
+            book[name]?.remove(phone)
+            return true
+        }
         return false
     }
 
@@ -85,8 +84,9 @@ class PhoneBook {
      * Если этого человека нет в книге, вернуть пустой список
      */
     fun phones(name: String): Set<String> {
-        if (book[name] != null)
-            return book[name]!!
+        val phones = book[name]
+        if (phones != null)
+            return phones
         return setOf()
     }
 

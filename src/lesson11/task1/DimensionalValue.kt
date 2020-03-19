@@ -19,15 +19,15 @@ package lesson11.task1
 class DimensionalValue(value: Double, dimension: String) : Comparable<DimensionalValue> {
     val d = dimension
     val v = value
+    private val prefix = DimensionPrefix.values().find { it.abbreviation == d.first().toString() }
     /**
      * Величина с БАЗОВОЙ размерностью (например для 1.0Kg следует вернуть результат в граммах -- 1000.0)
      */
     val value: Double
         get() {
-            if (DimensionPrefix.values().find { it.abbreviation == d.first().toString() } != null && d.length > 1
-                && Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null) {
-                return v * (DimensionPrefix.values().find { it.abbreviation == d.first().toString() }?.multiplier!!)
-            }
+            if (prefix != null && d.length > 1
+                && Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null
+            ) return v * prefix.multiplier
             return v
         }
 
@@ -37,11 +37,13 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
      */
     val dimension: Dimension
         get() {
-            if (d.length > 1 && DimensionPrefix.values().find { it.abbreviation == d.first().toString() } != null)
-                if (Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null)
-                    return Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) }!!
-            if (Dimension.values().find { it.abbreviation == d } != null) {
-                return (Dimension.values().find { it.abbreviation == d }!!)
+            val dValue = Dimension.values().find { it.abbreviation == d }
+            val pValue = Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) }
+            if (d.length > 1 && prefix != null)
+                if (pValue != null)
+                    return pValue
+            if (dValue != null) {
+                return dValue
             }
             throw IllegalArgumentException()
         }
@@ -49,7 +51,9 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     /**
      * Конструктор из строки. Формат строки: значение пробел размерность (1 Kg, 3 mm, 100 g и так далее).
      */
-    constructor(s: String) : this(s.split(" ")[0].toDouble(), s.split(" ")[1])
+    constructor(s: String) : this(s.split(" ")[0].toDouble(), s.split(" ")[1]) {
+        require(s.split(" ").size == 2)
+    }
 
     /**
      * Сложение с другой величиной. Если базовая размерность разная, бросить IllegalArgumentException
