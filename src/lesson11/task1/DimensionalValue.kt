@@ -83,7 +83,7 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     operator fun times(other: Double): DimensionalValue = DimensionalValue(value * other, dimension.abbreviation)
 
     /**
-     * Деление на число
+     * Деление а число
      */
     operator fun div(other: Double): DimensionalValue = DimensionalValue(value / other, dimension.abbreviation)
 
