@@ -18,24 +18,23 @@ import kotlin.math.sign
  * - либо соответствовать одной из приставок, к которой приписана сама размерность (Km, Kg, mm, mg)
  * - во всех остальных случаях следует бросить IllegalArgumentException
  */
-class DimensionalValue(value: Double, dimension: String) : Comparable<DimensionalValue> {
-    val d = dimension
-    val v = value
-    private val prefix = DimensionPrefix.values().find { it.abbreviation == d.first().toString() }
-    private val dValue = Dimension.values().find { it.abbreviation == d }
-    private val pValue = Dimension.values().find { it.abbreviation == d.substring(1) }
+class DimensionalValue (value: Double, dimension: String) : Comparable<DimensionalValue> {
+    private val dLength = dimension.length
+    private val prefix = DimensionPrefix.values().find { it.abbreviation == dimension.first().toString() }
+    private val dValue = Dimension.values().find { it.abbreviation == dimension }
+    private val pValue = Dimension.values().find { it.abbreviation == dimension.substring(1) }
     /**
      * Величина с БАЗОВОЙ размерностью (например для 1.0Kg следует вернуть результат в граммах -- 1000.0)
      */
-    private fun condition(): Boolean = d.length > 1 && pValue != null && prefix != null
+    private fun condition(): Boolean = dLength > 1 && pValue != null && prefix != null
 
     val value: Double = run {
         if (condition()) {
             if (prefix != null) {
-                return@run v * prefix.multiplier
+                return@run value * prefix.multiplier
             }
         }
-        return@run v
+        return@run value
     }
 
 
@@ -112,8 +111,8 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     override fun compareTo(other: DimensionalValue): Int = sign(minus(other).value).toInt()
 
     override fun hashCode(): Int {
-        var result = d.hashCode()
-        result = 31 * result + v.hashCode()
+        var result = dimension.hashCode()
+        result = 31 * result + value.hashCode()
         return result
     }
 }
