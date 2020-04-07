@@ -2,6 +2,8 @@
 
 package lesson11.task1
 
+import kotlin.math.sign
+
 /**
  * Класс "Величина с размерностью".
  *
@@ -20,30 +22,33 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     val d = dimension
     val v = value
     private val prefix = DimensionPrefix.values().find { it.abbreviation == d.first().toString() }
+    private val dValue = Dimension.values().find { it.abbreviation == d }
+    private val pValue = Dimension.values().find { it.abbreviation == d.substring(1) }
     /**
      * Величина с БАЗОВОЙ размерностью (например для 1.0Kg следует вернуть результат в граммах -- 1000.0)
      */
-    val value: Double
-        get() {
-            if (prefix != null && d.length > 1
-                && Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) } != null
-            ) return v * prefix.multiplier
-            return v
+    private fun condition(): Boolean = d.length > 1 && pValue != null && prefix != null
+
+    val value: Double = run {
+        if (condition()) {
+            if (prefix != null) {
+                return@run v * prefix.multiplier
+            }
         }
+        return@run v
+    }
 
 
     /**
      * БАЗОВАЯ размерность (опять-таки для 1.0Kg следует вернуть GRAM)
      */
-    val dimension: Dimension
-        get() {
-            val dValue = Dimension.values().find { it.abbreviation == d }
-            val pValue = Dimension.values().find { it.abbreviation == d.substringAfter(d.first()) }
-            if (d.length > 1 && prefix != null)
+    val dimension: Dimension =
+        run() {
+            if (condition())
                 if (pValue != null)
-                    return pValue
+                    return@run pValue
             if (dValue != null) {
-                return dValue
+                return@run dValue
             }
             throw IllegalArgumentException()
         }
@@ -104,10 +109,7 @@ class DimensionalValue(value: Double, dimension: String) : Comparable<Dimensiona
     /**
      * Сравнение на больше/меньше. Если базовая размерность разная, бросить IllegalArgumentException
      */
-    override fun compareTo(other: DimensionalValue): Int {
-        require(dimension == other.dimension)
-        return ((value - other.value) / kotlin.math.abs(value - other.value)).toInt()
-    }
+    override fun compareTo(other: DimensionalValue): Int = sign(minus(other).value).toInt()
 
     override fun hashCode(): Int {
         var result = d.hashCode()
